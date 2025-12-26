@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"project-app-portfolio-golang-azwin/dto"
 	"project-app-portfolio-golang-azwin/model"
 	"project-app-portfolio-golang-azwin/service"
 )
@@ -22,9 +23,9 @@ type PortofolioHandler struct {
 func NewPortofolioHandler(svc service.ProjectService) *PortofolioHandler {
 	// Parse templates
 	tmpl := template.Must(template.ParseFiles(
-		filepath.Join("views", "layouts", "layout.html"),
 		filepath.Join("views", "layouts", "header.html"),
 		filepath.Join("views", "layouts", "footer.html"),
+		filepath.Join("views", "layouts", "newsletter.html"),
 		filepath.Join("views", "pages", "portfolio.html"),
 	))
 	return &PortofolioHandler{service: svc, tmpl: tmpl}
@@ -53,7 +54,7 @@ func (h *PortofolioHandler) PortofolioPageView(w http.ResponseWriter, r *http.Re
 
 	// Render template
 	w.Header().Set("Content-Type", "text/html")
-	if err := h.tmpl.ExecuteTemplate(w, "layout", data); err != nil {
+	if err := h.tmpl.ExecuteTemplate(w, "portfolio", data); err != nil {
 		log.Printf("Template error: %v", err)
 		http.Error(w, "Template Error", http.StatusInternalServerError)
 	}
@@ -69,13 +70,12 @@ type HomeHandler struct {
 func NewHomeHandler(svc service.ProjectService) *HomeHandler {
 	// Parse templates
 	tmpl := template.Must(template.ParseFiles(
-		filepath.Join("views", "layouts", "layout.html"),
 		filepath.Join("views", "layouts", "header.html"),
-		filepath.Join("views", "layouts", "footer.html"),
-		filepath.Join("views", "pages", "index.html"),
-		filepath.Join("views", "layouts", "portofolio.html"),
 		filepath.Join("views", "layouts", "skill.html"),
+		filepath.Join("views", "layouts", "footer.html"),
 		filepath.Join("views", "layouts", "newsletter.html"),
+		filepath.Join("views", "layouts", "portofolio.html"),
+		filepath.Join("views", "pages", "index.html"),
 	))
 	return &HomeHandler{service: svc, tmpl: tmpl}
 }
@@ -103,7 +103,7 @@ func (h *HomeHandler) HomepageView(w http.ResponseWriter, r *http.Request) {
 
 	// Render template
 	w.Header().Set("Content-Type", "text/html")
-	if err := h.tmpl.ExecuteTemplate(w, "layout", data); err != nil {
+	if err := h.tmpl.ExecuteTemplate(w, "home", data); err != nil {
 		log.Printf("Template error: %v", err)
 		http.Error(w, "Template Error", http.StatusInternalServerError)
 	}
@@ -118,9 +118,9 @@ type AboutHandler struct {
 func NewAboutHandler() *AboutHandler {
 	// Parse templates
 	tmpl := template.Must(template.ParseFiles(
-		filepath.Join("views", "layouts", "layout.html"),
 		filepath.Join("views", "layouts", "header.html"),
 		filepath.Join("views", "layouts", "footer.html"),
+		filepath.Join("views", "layouts", "newsletter.html"),
 		filepath.Join("views", "pages", "about.html"),
 	))
 	return &AboutHandler{tmpl: tmpl}
@@ -137,7 +137,7 @@ func (h *AboutHandler) AboutpageView(w http.ResponseWriter, r *http.Request) {
 
 	// Render template
 	w.Header().Set("Content-Type", "text/html")
-	if err := h.tmpl.ExecuteTemplate(w, "layout", data); err != nil {
+	if err := h.tmpl.ExecuteTemplate(w, "about", data); err != nil {
 		http.Error(w, "Template Error", http.StatusInternalServerError)
 	}
 }
@@ -176,19 +176,19 @@ func (h *DownloadHandler) SeeCV(w http.ResponseWriter, r *http.Request) {
 
 // ContactHandler menangani request untuk halaman contact
 type ContactHandler struct {
-	tmpl *template.Template
+	service service.ContactService
+	tmpl    *template.Template
 }
 
 // NewContactHandler constructor untuk ContactHandler
-func NewContactHandler() *ContactHandler {
+func NewContactHandler(svc service.ContactService) *ContactHandler {
 	// Parse templates
 	tmpl := template.Must(template.ParseFiles(
-		filepath.Join("views", "layouts", "layout.html"),
 		filepath.Join("views", "layouts", "header.html"),
 		filepath.Join("views", "layouts", "footer.html"),
 		filepath.Join("views", "pages", "contact.html"),
 	))
-	return &ContactHandler{tmpl: tmpl}
+	return &ContactHandler{service: svc, tmpl: tmpl}
 }
 
 // ContactPageView menangani GET /contact - menampilkan halaman contact
@@ -202,7 +202,7 @@ func (h *ContactHandler) ContactPageView(w http.ResponseWriter, r *http.Request)
 
 	// Render template
 	w.Header().Set("Content-Type", "text/html")
-	if err := h.tmpl.ExecuteTemplate(w, "layout", data); err != nil {
+	if err := h.tmpl.ExecuteTemplate(w, "contact", data); err != nil {
 		http.Error(w, "Template Error", http.StatusInternalServerError)
 	}
 }
@@ -215,14 +215,38 @@ func (h *ContactHandler) SendMessageHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	name := r.FormValue("name")
-	email := r.FormValue("email")
-	subject := r.FormValue("subject")
-	message := r.FormValue("message")
+	// Create DTO from form
+	contactReq := &dto.ContactRequest{
+		Name:    r.FormValue("name"),
+		Email:   r.FormValue("email"),
+		Subject: r.FormValue("subject"),
+		Message: r.FormValue("message"),
+		Phone:   r.FormValue("phone"),
+	}
 
-	// TODO: Implement actual message sending (email, database, etc.)
-	// For now, just log the message
-	log.Printf("Contact form submitted - Name: %s, Email: %s, Subject: %s, Message: %s", name, email, subject, message)
+	// Get client IP and User-Agent
+	ip := r.RemoteAddr
+	userAgent := r.UserAgent()
+
+	// Convert DTO to model
+	contact := &model.ContactMessage{
+		Name:      contactReq.Name,
+		Email:     contactReq.Email,
+		Subject:   &contactReq.Subject,
+		Message:   contactReq.Message,
+		Phone:     &contactReq.Phone,
+		IPAddress: &ip,
+		UserAgent: &userAgent,
+	}
+
+	// Save to database via service
+	if err := h.service.CreateContactMessage(r.Context(), contact); err != nil {
+		log.Printf("Error saving contact message: %v", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	log.Printf("Contact form submitted and saved - Name: %s, Email: %s", contactReq.Name, contactReq.Email)
 
 	// Redirect back to contact page with success message
 	http.Redirect(w, r, "/contact?success=1", http.StatusSeeOther)
@@ -257,7 +281,7 @@ func NewHandler(svc *service.Service) *Handler {
 		HomeHandler:       NewHomeHandler(svc.ProjectService),
 		AboutHandler:      NewAboutHandler(),
 		DownloadHandler:   &DownloadHandler{},
-		ContactHandler:    NewContactHandler(),
+		ContactHandler:    NewContactHandler(svc.ContactService),
 		AuthHandler:       &AuthHandler{},
 
 		PortofolioHandler: NewPortofolioHandler(svc.ProjectService),

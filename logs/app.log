@@ -1,0 +1,12 @@
+{"level":"info","ts":1766756047.7639694,"caller":"project-app-portfolio-golang-azwin/main.go:57","msg":"Server starting on port 8080"}
+{"level":"info","ts":1766756060.5864627,"caller":"middleware/logging.go:17","msg":"Incoming request","method":"GET","url":"/","remote_addr":"[::1]:65069","user_agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"}
+{"level":"info","ts":1766756060.595051,"caller":"middleware/logging.go:28","msg":"Request completed","method":"GET","url":"/","duration":0.0085882}
+{"level":"info","ts":1766756073.1761792,"caller":"middleware/logging.go:17","msg":"Incoming request","method":"GET","url":"/download/cv","remote_addr":"[::1]:65069","user_agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"}
+{"level":"info","ts":1766756073.1783168,"caller":"middleware/logging.go:28","msg":"Request completed","method":"GET","url":"/download/cv","duration":0.0021376}
+{"level":"info","ts":1766756092.5404198,"caller":"project-app-portfolio-golang-azwin/main.go:57","msg":"Server starting on port 8080"}
+{"level":"info","ts":1766756098.9986758,"caller":"middleware/logging.go:17","msg":"Incoming request","method":"GET","url":"/contact","remote_addr":"[::1]:61555","user_agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"}
+{"level":"info","ts":1766756099.0000496,"caller":"middleware/logging.go:28","msg":"Request completed","method":"GET","url":"/contact","duration":0.0013739}
+{"level":"info","ts":1766756116.1101296,"caller":"middleware/logging.go:17","msg":"Incoming request","method":"POST","url":"/contact/send","remote_addr":"[::1]:61555","user_agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"}
+{"level":"info","ts":1766756116.1193938,"caller":"middleware/logging.go:28","msg":"Request completed","method":"POST","url":"/contact/send","duration":0.009264}
+{"level":"info","ts":1766756116.1245883,"caller":"middleware/logging.go:17","msg":"Incoming request","method":"GET","url":"/contact?success=1","remote_addr":"[::1]:61555","user_agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"}
+{"level":"info","ts":1766756116.1245883,"caller":"middleware/logging.go:28","msg":"Request completed","method":"GET","url":"/contact?success=1","duration":0}

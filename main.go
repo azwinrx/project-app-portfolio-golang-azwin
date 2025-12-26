@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 	"project-app-portfolio-golang-azwin/database"
 	"project-app-portfolio-golang-azwin/handler"
 	"project-app-portfolio-golang-azwin/repository"
@@ -13,8 +14,16 @@ import (
 )
 
 func main() {
-	// Initialize logger
-	logger, err := zap.NewProduction()
+	// Create logs directory if not exists
+	if err := os.MkdirAll("logs", 0755); err != nil {
+		log.Fatal("Failed to create logs directory:", err)
+	}
+
+	// Initialize logger with file output
+	config := zap.NewProductionConfig()
+	config.OutputPaths = []string{"logs/app.log"}
+	config.ErrorOutputPaths = []string{"logs/app.log"}
+	logger, err := config.Build()
 	if err != nil {
 		log.Fatal("Failed to initialize logger:", err)
 	}
@@ -28,9 +37,10 @@ func main() {
 
 	// Initialize repository
 	repo := repository.NewProjectRepository(db)
+	contactRepo := repository.NewContactRepository(db)
 
 	// Initialize service
-	svc := service.NewService(repo)
+	svc := service.NewService(repo, contactRepo)
 
 	// Initialize handler
 	handl := handler.NewHandler(svc)
