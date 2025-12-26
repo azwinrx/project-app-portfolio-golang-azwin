@@ -55,6 +55,7 @@ func main() {
 
 	// Start server
 	logger.Info("Server starting on port 8080")
+	println("Server is successfully running on : http://localhost:8080")
 	if err := http.ListenAndServe(":8080", r); err != nil {
 		logger.Fatal("Server failed to start", zap.Error(err))
 	}
