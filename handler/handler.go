@@ -73,6 +73,9 @@ func NewHomeHandler(svc service.ProjectService) *HomeHandler {
 		filepath.Join("views", "layouts", "header.html"),
 		filepath.Join("views", "layouts", "footer.html"),
 		filepath.Join("views", "pages", "index.html"),
+		filepath.Join("views", "layouts", "portofolio.html"),
+		filepath.Join("views", "layouts", "skill.html"),
+		filepath.Join("views", "layouts", "newsletter.html"),
 	))
 	return &HomeHandler{service: svc, tmpl: tmpl}
 }
