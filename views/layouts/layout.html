@@ -1,0 +1,42 @@
+{{define "layout"}}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link rel="icon" href="/public/img/favicon.png" type="image/png" />
+    <title>{{.Title}}</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/public/css/bootstrap.css" />
+    <link rel="stylesheet" href="/public/vendors/linericon/style.css" />
+    <link rel="stylesheet" href="/public/css/font-awesome.min.css" />
+    <link
+      rel="stylesheet"
+      href="/public/vendors/owl-carousel/owl.carousel.min.css"
+    />
+    <link rel="stylesheet" href="/public/css/magnific-popup.css" />
+    <link
+      rel="stylesheet"
+      href="/public/vendors/nice-select/css/nice-select.css"
+    />
+    <!-- main css -->
+    <link rel="stylesheet" href="/public/css/style.css" />
+  </head>
+  <body>
+    {{template "header" .}} {{block "content" .}}{{end}} {{template "footer" .}}
+
+    <!-- Optional JavaScript -->
+    <script src="/public/js/jquery-3.2.1.min.js"></script>
+    <script src="/public/js/popper.js"></script>
+    <script src="/public/js/bootstrap.min.js"></script>
+    <script src="/public/js/stellar.js"></script>
+    <script src="/public/js/jquery.ajaxchimp.min.js"></script>
+    <script src="/public/js/mail-script.js"></script>
+    <script src="/public/js/theme.js"></script>
+  </body>
+</html>
+{{end}}

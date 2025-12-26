@@ -1,29 +1,51 @@
 package main
 
 import (
-	"context"
 	"log"
+	"net/http"
 	"project-app-portfolio-golang-azwin/database"
+	"project-app-portfolio-golang-azwin/handler"
+	"project-app-portfolio-golang-azwin/repository"
+	"project-app-portfolio-golang-azwin/router"
+	"project-app-portfolio-golang-azwin/service"
+
+	"go.uber.org/zap"
 )
 
 func main() {
-	// Inisialisasi database
-	db , err := database.InitDB()
-	// Validasi connection
+	// Initialize logger
+	logger, err := zap.NewProduction()
 	if err != nil {
-		log.Fatalf("Failed connect to database: %v", err)
-	}else{
-		log.Println("Successfully connected to the database")
+		log.Fatal("Failed to initialize logger:", err)
+	}
+	defer logger.Sync()
+
+	// Initialize database
+	db, err := database.NewDatabase()
+	if err != nil {
+		logger.Fatal("Failed to connect to database", zap.Error(err))
 	}
 
-	defer db.Close(context.Background())
+	// Initialize repository
+	repo := repository.NewProjectRepository(db)
 
-	// Ping database
-	err= db.Ping(context.Background())
-	// Validasi ping
-	if err != nil {
-		log.Fatalf("Failed ping to database: %v", err)
-	}else{
-		log.Println("Successfully ping to the database")
+	// Initialize service
+	svc := service.NewService(repo)
+
+	// Initialize handler
+	handl := handler.NewHandler(svc)
+
+	// Initialize router
+	r := router.NewRouter(svc, handl, logger)
+
+	// public folder permission
+	fs := http.FileServer(http.Dir("public"))
+	r.Handle("/public/*", http.StripPrefix("/public/", fs))
+
+
+	// Start server
+	logger.Info("Server starting on port 8080")
+	if err := http.ListenAndServe(":8080", r); err != nil {
+		logger.Fatal("Server failed to start", zap.Error(err))
 	}
 }

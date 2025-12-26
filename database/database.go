@@ -3,8 +3,8 @@ package database
 import (
 	"context"
 
-	"github.com/jackc/pgconn"
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
 )
 
 type PgxIface interface {
@@ -13,7 +13,7 @@ type PgxIface interface {
 	Exec(ctx context.Context, sql string, args ...any) (pgconn.CommandTag, error)
 }
 
-func InitDB() (*pgx.Conn, error) {
+func NewDatabase() (PgxIface, error) {
 	connStr := "user=postgres password=8824001 dbname=portofolio-db sslmode=disable host=localhost"
 	conn, err := pgx.Connect(context.Background(), connStr)
 	return conn, err

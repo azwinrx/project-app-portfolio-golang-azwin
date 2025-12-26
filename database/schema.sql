@@ -267,7 +267,7 @@ VALUES (
     'azwinrifai321@gmail.com',
     '+62 888-8888-8888',
     'Bekasi, Indonesia',
-    '/public/img/profile.jpg',
+    '/public/img/profile.png',
     'https://azwin.dev'
 );
 
@@ -330,7 +330,7 @@ VALUES
         'Productive android app that combining an Pomodoro timer and To Do List with gamification things, i made this project to help my self for managing my task and a simple timer to help when i study',
         'Android Development',
         'https://github.com/azwinrx/Productive-Heroes',
-        '/public/img/portfolio/project1.jpg',
+        '/public/img/portfolio/project1.png',
         ARRAY['Kotlin','Jetpack Compose'],
         TRUE,
         'completed',
@@ -342,7 +342,7 @@ VALUES
         'LogicBase is a mini project platform for helping people to understand about basic of programming, learning the concept, and do some quiz',
         'Web Development',
         'https://github.com/azwinrx/LogicBase',
-        '/public/img/portfolio/project2.jpg',
+        '/public/img/portfolio/project2.png',
         ARRAY['JavaScript','Node.js', 'React','Tailwind CSS','Supabase'],
         TRUE,
         'completed',
@@ -354,7 +354,7 @@ VALUES
         'JantungIn is a web application that can help users to detect the risk of heart disease using machine learning model, this project is my capstone project in CodingCamp 2025 powered by DBS Indonesia and Dicoding',
         'Web Development',
         'https://github.com/azwinrx/JantungIn',
-        '/public/img/portfolio/project3.jpg',
+        '/public/img/portfolio/project3.png',
         ARRAY['JavaScript','Node.js', 'Vue', 'Vite','Tailwind CSS','Hapi.js','TensorFlow.js','PostgreSQL'],
         TRUE,
         'completed',
@@ -366,7 +366,7 @@ VALUES
         'WinChat is a simple global-chat anonymous application that built with golang and react, this app made to practice real-time application with websocket technology',
         'Web Development',
         'https://github.com/azwinrx/winchat',
-        '/public/img/portfolio/project4.jpg',
+        '/public/img/portfolio/project4.png',
         ARRAY['JavaScript', 'Firebase'],
         TRUE,
         'completed',
@@ -375,38 +375,24 @@ VALUES
 
 -- Insert blog posts
 INSERT INTO blog_posts (title, slug, content, excerpt, author_name, category, tags, is_published, published_at)
-VALUES (
-    'Getting Started with Golang',
-    'getting-started-with-golang',
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Full content here...',
-    'Learn the basics of Golang programming language',
-    'Azwin Developer',
-    'Programming',
-    ARRAY['golang', 'programming', 'tutorial'],
-    TRUE,
-    CURRENT_TIMESTAMP
-);
+VALUES 
+    ('Getting Started with Golang', 'getting-started-with-golang', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Full content here...', 'Learn the basics of Golang programming language', 'Azwin Developer', 'Programming', ARRAY['golang', 'programming', 'tutorial'], TRUE, CURRENT_TIMESTAMP),
+    ('Building REST APIs with Golang', 'building-rest-apis-golang', 'Comprehensive guide to building RESTful APIs using Golang and Gin framework.', 'Step-by-step tutorial for creating robust REST APIs', 'Azwin Developer', 'Web Development', ARRAY['golang', 'api', 'rest'], TRUE, CURRENT_TIMESTAMP),
+    ('Database Design Best Practices', 'database-design-best-practices', 'Learn about normalization, indexing, and optimization techniques for databases.', 'Essential principles for effective database design', 'Azwin Developer', 'Database', ARRAY['database', 'design', 'postgresql'], TRUE, CURRENT_TIMESTAMP);
 
 -- Insert testimonials
 INSERT INTO testimonials (client_name, client_position, client_company, testimonial_text, rating, is_approved)
-VALUES (
-    'John Doe',
-    'CTO',
-    'Tech Startup Inc',
-    'Excellent work! The project was delivered on time and exceeded our expectations.',
-    5,
-    TRUE
-);
+VALUES 
+    ('John Doe', 'CTO', 'Tech Startup Inc', 'Excellent work! The project was delivered on time and exceeded our expectations.', 5, TRUE),
+    ('Sarah Johnson', 'Project Manager', 'Digital Solutions Ltd', 'Professional and reliable. Highly recommend for any development project.', 5, TRUE),
+    ('Mike Chen', 'CEO', 'Innovate Corp', 'Great communication and quality code. Will definitely work together again.', 4, TRUE);
 
--- Insert contact message sample
-INSERT INTO contact_messages (name, email, subject, message, is_read)
-VALUES (
-    'Jane Smith',
-    'jane@example.com',
-    'Project Inquiry',
-    'I would like to discuss a potential project collaboration.',
-    FALSE
-);
+-- Insert blog comments
+INSERT INTO blog_comments (blog_post_id, commenter_name, commenter_email, comment_text, is_approved)
+VALUES 
+    (1, 'Dev Enthusiast', 'dev@example.com', 'Great introduction to Golang! Very helpful for beginners.', TRUE),
+    (2, 'API Developer', 'api.dev@email.com', 'Excellent guide on REST APIs. The examples are clear and practical.', TRUE),
+    (3, 'Database Admin', 'dba@company.com', 'Good overview of database design principles. Would love to see more examples.', TRUE);
 
 -- =====================================================
 -- CREATE FUNCTIONS untuk auto-update timestamp
