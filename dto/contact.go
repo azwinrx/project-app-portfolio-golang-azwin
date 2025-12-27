@@ -1,6 +1,6 @@
 package dto
 
-// ContactRequest DTO untuk request contact form
+// ContactRequest DTO
 type ContactRequest struct {
 	Name    string `json:"name" validate:"required,min=2,max=100"`
 	Email   string `json:"email" validate:"required,email"`
@@ -9,7 +9,7 @@ type ContactRequest struct {
 	Phone   string `json:"phone,omitempty" validate:"max=20"`
 }
 
-// ContactResponse DTO untuk response contact message
+// ContactResponse DTO
 type ContactResponse struct {
 	ID        int    `json:"id"`
 	Name      string `json:"name"`
